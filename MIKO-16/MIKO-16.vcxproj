@@ -147,6 +147,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="MIKO Main.cpp" />
+    <ClCompile Include="MIKO_Memory.cpp" />
+    <ClCompile Include="MIKO_Processor.cpp" />
+    <ClCompile Include="MIKO_System.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MIKO_Memory.h" />
+    <ClInclude Include="MIKO_Processor.h" />
+    <ClInclude Include="MIKO_System.h" />
+    <ClInclude Include="SDL Cleanup.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

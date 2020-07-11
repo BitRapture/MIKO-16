@@ -18,5 +18,28 @@
     <ClCompile Include="MIKO Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MIKO_System.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MIKO_Memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MIKO_Processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SDL Cleanup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MIKO_System.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MIKO_Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MIKO_Processor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

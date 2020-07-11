@@ -1,0 +1,44 @@
+#pragma once
+#include <SDL.h>
+#include "SDL Cleanup.h"
+
+#include "MIKO_Memory.h"
+#include "MIKO_Processor.h"
+
+class MIKO_System
+{
+public:
+	bool miko_sys_running = true;
+	// Keeps the game loop running, false will exit the game loop
+
+	Uint8 miko_keys = 0;	
+	// 8 Bit value that binds keypresses
+	// MSB reserved for application purposes
+
+	Uint8 miko_colours[48] = {
+		0x16, 0x17, 0x1a,
+		0x7f, 0x6, 0x22,
+		0xd6, 0x24, 0x11,
+		0xff, 0x84, 0x26,
+		0xff, 0xd1, 0,
+		0xfa, 0xfd, 0xff,
+		0xff, 0x80, 0xa4,
+		0xff, 0x26, 0x74,
+		0x94, 0x21, 0x6a,
+		0x43, 0, 0x67,
+		0x23, 0x49, 0x75,
+		0x68, 0xae, 0xd4,
+		0xbf, 0xff, 0x3c,
+		0x10, 0xd2, 0x75,
+		0, 0x78, 0x99,
+		0, 0x28, 0x59
+	};
+	// 24-bit RGB colours
+	// currently a placeholder palette by https://lospec.com/palette-list/bubblegum-16
+
+private:
+	MIKO_Memory miko_mem;
+	MIKO_Processor miko_cpu;
+
+};
+
