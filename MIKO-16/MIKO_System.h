@@ -12,8 +12,8 @@ public:
 	// Keeps the game loop running, false will exit the game loop
 
 	Uint8 miko_keys = 0;	
-	// 8 Bit value that binds keypresses
-	// MSB reserved for application purposes
+	// 8-bit value that binds keypresses
+	// MSB tells us if the same keys were pressed
 
 	Uint8 miko_colours[48] = {
 		0x16, 0x17, 0x1a,
@@ -39,6 +39,40 @@ public:
 private:
 	MIKO_Memory miko_mem;
 	MIKO_Processor miko_cpu;
+	// Instanciate the components
+
+	SDL_Renderer* miko_render = nullptr;
+	SDL_Event miko_event = {};
+	// SDL variables, get reference of render
+	// miko_event records user input
+
+	enum class MIKO_State { MIKO_MENU, MIKO_CART, MIKO_EDITOR, MIKO_IDE } miko_program = MIKO_State::MIKO_MENU;
+	// Enum contains all system states
+
+	SDL_Surface* miko_scfg = SDL_CreateRGBSurface(0, 256, 240, 24, 0, 0, 0, 0), * miko_scbg = SDL_CreateRGBSurface(0, 256, 240, 24, 0, 0, 0, 0);
+	SDL_Texture* miko_txfg, * miko_txbg;
+	SDL_Rect miko_display = { 0, 0, 256, 240 };
+	// Creates the screens
+
+private:
+	int b_x = 0, b_y = 0;
+
+	void renderMenu();
+	// Render MIKO menu
+
+public:
+	bool initialise(SDL_Renderer*);
+	// Initialises connections
+	// Returns true if failed to init
+
+	void updateKeys();
+	// Update keypress information
+
+	void updateSys();
+	// Update system
+
+public:
+	~MIKO_System();
 
 };
 
