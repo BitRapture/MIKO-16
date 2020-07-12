@@ -43,8 +43,7 @@ int main(int, char**)
 	while (MIKO.miko_sys_running)
 	{
 		frameStart = SDL_GetTicks();
-		
-		SDL_SetRenderDrawColor(miko_render, 0, 0, 0, 0xff);
+
 		SDL_RenderClear(miko_render);
 
 		MIKO.updateKeys();

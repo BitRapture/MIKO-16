@@ -5,13 +5,18 @@
 #include "MIKO_Memory.h"
 #include "MIKO_Processor.h"
 
+#include <iostream>
+#include <bitset>
+
 class MIKO_System
 {
 public:
 	bool miko_sys_running = true;
 	// Keeps the game loop running, false will exit the game loop
 
-	Uint8 miko_keys = 0;	
+
+private:
+	Uint8 miko_keys = 0, preserveKeys = 0;	
 	// 8-bit value that binds keypresses
 	// MSB tells us if the same keys were pressed
 
@@ -49,8 +54,8 @@ private:
 	enum class MIKO_State { MIKO_MENU, MIKO_CART, MIKO_EDITOR, MIKO_IDE } miko_program = MIKO_State::MIKO_MENU;
 	// Enum contains all system states
 
-	SDL_Surface* miko_scfg = SDL_CreateRGBSurface(0, 256, 240, 24, 0, 0, 0, 0), * miko_scbg = SDL_CreateRGBSurface(0, 256, 240, 24, 0, 0, 0, 0);
-	SDL_Texture* miko_txfg, * miko_txbg;
+	SDL_Surface* miko_scfg = SDL_CreateRGBSurface(0, 256, 240, 24, 0, 0, 0, 0);
+	SDL_Texture* miko_txfg;
 	SDL_Rect miko_display = { 0, 0, 256, 240 };
 	// Creates the screens
 
