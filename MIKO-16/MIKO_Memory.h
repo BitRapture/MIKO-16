@@ -1,8 +1,6 @@
 #pragma once
 #include <SDL.h>
 
-#include "MIKO_System.h"
-
 class MIKO_Memory
 {
 private:
@@ -13,7 +11,9 @@ private:
 	// Initialise program ROM (unknown size) and character ROM (96K = 128 16*16 sprites)	
 
 public:
-
+	bool initial_check();
+	// Checks if ram_memory and char_memory have allocated successfully
+	// Returns true if memory failed to allocate
 
 public:
 	~MIKO_Memory();

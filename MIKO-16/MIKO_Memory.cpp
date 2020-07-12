@@ -7,3 +7,9 @@ MIKO_Memory::~MIKO_Memory()
 	char_rom = nullptr;
 	prog_rom = nullptr;
 }
+
+bool MIKO_Memory::initial_check()
+{
+	if (ram_memory == nullptr || char_rom == nullptr) return true;
+	return false;
+}
