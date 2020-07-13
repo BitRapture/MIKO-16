@@ -157,6 +157,9 @@
     <ClInclude Include="MIKO_System.h" />
     <ClInclude Include="SDL Cleanup.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="MIKO_Alphabet.bmp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
