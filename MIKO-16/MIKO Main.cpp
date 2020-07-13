@@ -8,7 +8,7 @@ int main(int, char**)
 		return 400;
 	}
 
-	SDL_Window* miko_window = SDL_CreateWindow("MIKO-16", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 256, 240, SDL_WINDOW_SHOWN);
+	SDL_Window* miko_window = SDL_CreateWindow("MIKO-16", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 256, 256, SDL_WINDOW_SHOWN);
 	if (miko_window == nullptr)
 	{
 		SDL_Log("[SDL2] Window Creation Error: %s", SDL_GetError());
