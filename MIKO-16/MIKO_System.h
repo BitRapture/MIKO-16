@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 #include <SDL.h>
 #include "SDL Cleanup.h"
 
@@ -30,14 +31,15 @@ private:
 
 private:
 	Uint8 miko_keys = 0, preserveKeys = 0;
-	// 8-bit value that binds keypresses
+	// 8-bit value that binds keypresses to be used in mem
 	// MSB tells us if the same keys were pressed
 	// preserveKeys is for the MSB
 
-	char miko_keyHandler = 0, miko_keyControls = 0;
+	Uint8 miko_keyControls = 0;
+	char miko_keyHandler = 0;
 	bool miko_keyDown = false, miko_keyUsed = false;
 	// Preserves the last key pressed, it preserves most keys
-	// mikoKeyUsed stops multiple uses of the same key
+	// mikoKeyUsed stops multiple uses of the same key, also an 8-bit value
 	// mikoKeyControls preserves keys such as ctrl, shift and alt
 	// Used for system purposes
 
@@ -50,24 +52,28 @@ private:
 	// SDL variables, get reference of render
 	// miko_event records user input
 
-	enum class MIKO_State { MIKO_CONSOLE, MIKO_CART, MIKO_EDITOR, MIKO_IDE } miko_program = MIKO_State::MIKO_CONSOLE;
-	// Enum contains all system states
-
 	SDL_Surface* miko_scfg = SDL_CreateRGBSurface(0, 256, 256, 24, 0, 0, 0, 0);
-	SDL_Texture* miko_txfg;
+	SDL_Texture* miko_txfg = nullptr;
 	SDL_Rect miko_display = { 0, 0, 256, 256 };
 	// Sets up the rendering display surface
 
 	SDL_Surface* miko_sctxt = SDL_LoadBMP("MIKO_Alphabet.bmp");
 	// Load MIKO_Alphabet for UI usage
 
-private:
-	int b_i = 0;
-	std::string log;
+	enum class MIKO_State { MIKO_CONSOLE, MIKO_CART, MIKO_EDITOR, MIKO_IDE } miko_program = MIKO_State::MIKO_CONSOLE;
+	// Enum contains all system states
 
+	std::vector<std::string> miko_console_args;
+	// Console arguments for commands
+
+
+private:
 	void printText(std::string, Uint8, Uint8, Uint8);
-	// possible placeholder function
 	// parses a string and prints to screen
+
+	bool logArgs();
+	// send user input to the args vector
+	// returns true when user presses enter
 
 	void updateConsole();
 	// Render MIKO console
