@@ -5,6 +5,12 @@ bool MIKO_System::initialise(SDL_Renderer* ren)
 	miko_cpu.to_mem = &miko_mem;
 	miko_render = ren;
 
+	miko_console_commands.push_back("exit");
+	miko_console_commands.push_back("run");
+	miko_console_commands.push_back("make");
+	miko_console_commands.push_back("compile");
+	miko_console_commands.push_back("build");
+
 	SDL_SetColorKey(miko_sctxt, SDL_TRUE, 0xffffff);
 
 	if (miko_mem.initial_check()) return true;
@@ -40,7 +46,7 @@ void MIKO_System::printText(std::string msg, Uint8 color, Uint8 x, Uint8 y)
 			src_chr.x = (msg.at(i) - 0x61) * 16;
 		SDL_BlitSurface(miko_sctxt, &src_chr, temp_surf, &dst_chr);
 		SDL_BlitSurface(temp_surf, &dst_chr, miko_scfg, &dst_chr);
-		dst_chr.x = x + (dst_x * 16);
+		dst_chr.x = x + (dst_x * 14);
 	}
 
 	SDL_FreeSurface(temp_surf);
@@ -54,10 +60,11 @@ bool MIKO_System::logArgs()
 		{
 			if (miko_console_args.empty())
 				miko_console_args.push_back("");
-			miko_console_args.back() += miko_keyHandler;
 
 			if (miko_keyHandler == ' ')
 				miko_console_args.push_back("");
+			else
+				miko_console_args.back() += miko_keyHandler;
 
 			miko_keyUsed = true;
 		}
@@ -70,6 +77,8 @@ bool MIKO_System::logArgs()
 					if (miko_console_args[i] != "")
 					{
 						miko_console_args[i].pop_back();
+						if (miko_console_args.size() == 1 && miko_console_args[i] == "")
+							miko_console_args.pop_back();
 						break;
 					}
 					miko_console_args.pop_back();
@@ -103,102 +112,6 @@ void MIKO_System::updateKeys()
 		case SDL_KEYDOWN:
 			switch (miko_event.key.keysym.sym)
 			{
-			case SDLK_a:
-				miko_keyHandler = 'a';
-				miko_keyUsed = false;
-				break;
-			case SDLK_b:
-				miko_keyHandler = 'b';
-				miko_keyUsed = false;
-				break;
-			case SDLK_c:
-				miko_keyHandler = 'c';
-				miko_keyUsed = false;
-				break;
-			case SDLK_d:
-				miko_keyHandler = 'd';
-				miko_keyUsed = false;
-				break;
-			case SDLK_e:
-				miko_keyHandler = 'e';
-				miko_keyUsed = false;
-				break;
-			case SDLK_f:
-				miko_keyHandler = 'f';
-				miko_keyUsed = false;
-				break;
-			case SDLK_g:
-				miko_keyHandler = 'g';
-				miko_keyUsed = false;
-				break;
-			case SDLK_h:
-				miko_keyHandler = 'h';
-				miko_keyUsed = false;
-				break;
-			case SDLK_i:
-				miko_keyHandler = 'i';
-				miko_keyUsed = false;
-				break;
-			case SDLK_j:
-				miko_keyHandler = 'j';
-				miko_keyUsed = false;
-				break;
-			case SDLK_k:
-				miko_keyHandler = 'k';
-				miko_keyUsed = false;
-				break;
-			case SDLK_l:
-				miko_keyHandler = 'l';
-				miko_keyUsed = false;
-				break;
-			case SDLK_m:
-				miko_keyHandler = 'm';
-				miko_keyUsed = false;
-				break;
-			case SDLK_n:
-				miko_keyHandler = 'n';
-				miko_keyUsed = false;
-				break;
-			case SDLK_o:
-				miko_keyHandler = 'o';
-				miko_keyUsed = false;
-				break;
-			case SDLK_p:
-				miko_keyHandler = 'p';
-				miko_keyUsed = false;
-				break;
-			case SDLK_q:
-				miko_keyHandler = 'q';
-				miko_keyUsed = false;
-				break;
-			case SDLK_r:
-				miko_keyHandler = 'r';
-				miko_keyUsed = false;
-				break;
-			case SDLK_s:
-				miko_keyHandler = 's';
-				miko_keyUsed = false;
-				break;
-			case SDLK_t:
-				miko_keyHandler = 't';
-				miko_keyUsed = false;
-				break;
-			case SDLK_u:
-				miko_keyHandler = 'u';
-				miko_keyUsed = false;
-				break;
-			case SDLK_v:
-				miko_keyHandler = 'v';
-				miko_keyUsed = false;
-				break;
-			case SDLK_w:
-				miko_keyHandler = 'w';
-				miko_keyUsed = false;
-				break;
-			case SDLK_y:
-				miko_keyHandler = 'y';
-				miko_keyUsed = false;
-				break;
 			case SDLK_RIGHT:
 				miko_keys |= 0x1;
 				break;
@@ -211,15 +124,6 @@ void MIKO_System::updateKeys()
 			case SDLK_DOWN:
 				miko_keys |= 0x8;
 				break;
-			case SDLK_z:
-				miko_keys |= 0x10;
-				miko_keyHandler = 'z';
-				miko_keyUsed = false;
-				break;
-			case SDLK_x:
-				miko_keys |= 0x20;
-				miko_keyHandler = 'x';
-				miko_keyUsed = false;
 				break;
 			case SDLK_ESCAPE:
 				miko_keys |= 0x40;
@@ -241,13 +145,19 @@ void MIKO_System::updateKeys()
 				break;
 			case SDLK_SPACE:
 				miko_keyControls |= 0x10;
-				miko_keyHandler = ' ';
+				miko_keyHandler = 0x20;
 				miko_keyUsed = false;
 				break;
 			case SDLK_RETURN:
 				miko_keyControls |= 0x20;
 				break;
 			}
+			if (miko_event.key.keysym.sym >= 97 && miko_event.key.keysym.sym <= 122)
+			{
+				miko_keyHandler = miko_event.key.keysym.sym;
+				miko_keyUsed = false;
+			}
+
 			miko_keyDown = true;
 			break;
 		case SDL_KEYUP:
@@ -301,23 +211,78 @@ void MIKO_System::updateConsole()
 
 	SDL_FillRect(miko_scfg, &miko_display, miko_colours[0]);
 
-	int p_x = 0, p_y = 0, p_c = 3;;
-	for (std::string i : miko_console_args)
-	{
-		if (i == "run " || i == "run")
-			p_c = 5;
-		else
-			p_c = 3;
+	auto args = miko_console_args.size();
+	auto it = (args > 0) ? std::find(miko_console_commands.begin(), miko_console_commands.end(), miko_console_args[0]) : miko_console_commands.end();
+	auto command = std::distance(miko_console_commands.begin(), it);
 
-		printText(i, p_c, p_x, 0);
-		p_x += i.length() * 16;
+	// Handle commands
+
+	if (logArgs() && !miko_console_args.empty())
+	{
+		if (it != miko_console_commands.end())
+		{
+			switch (command)
+			{
+				// Exit
+			case 0:
+				if (args == 1)
+					miko_sys_running = false;
+				break;
+
+				// RunS
+			case 1:
+				if (args == 2 && miko_console_args[1].length() == 1)
+				{
+					switch (miko_console_args[1].at(0))
+					{
+						// Open recent file
+					case 'r':
+						if (miko_lastPath != nullptr)
+						{
+
+						}
+						break;
+
+						// Open file explorer
+					case 'o':
+						if (NFD_OpenDialog("miko", NULL, &miko_lastPath) == NFD_OKAY)
+						{
+
+						}
+						else
+							miko_lastPath = nullptr;
+						break;
+					}
+				}
+				break;
+			
+				// Make/compile/build
+			case 2:
+			case 3:
+			case 4:
+
+				break;
+			}
+		}
+		else
+		{
+
+		}
 	}
 
-	SDL_Log("%i", miko_console_args.size());
+	// Draw text and command formatting 
 
-	if (logArgs())
-	{
-		if (!miko_console_args.empty())
-			miko_console_args.clear();
+	int p_x = 0, p_y = 0, p_c = 3;;
+	for (std::string i : miko_console_args)
+	{	
+		if (i == "commit")
+			p_c = 5;
+		else if (i == "die")
+			p_c = 10;
+		else
+			p_c = 2;
+
+		printText(i + " ", p_c, p_x, 0);
+		p_x += (i.length() * 14) + 14;
 	}
 }

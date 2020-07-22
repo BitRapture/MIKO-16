@@ -1,7 +1,9 @@
 #pragma once
+#include <algorithm>
 #include <string>
 #include <vector>
 #include <SDL.h>
+#include <nfd.h>
 #include "SDL Cleanup.h"
 
 #include "MIKO_Memory.h"
@@ -18,14 +20,14 @@ public:
 
 private:
 	Uint32 miko_colours[16] = {
-		0x08040d, 0xcfd1ff,
-		0x1b5fde, 0x8d36a2,
-		0xdb446f, 0xdb0f0f,
-		0xd34913, 0xe0a714,
-		0x68e055, 0x0508e8,
-		0x6026ea, 0xdb2a32,
-		0xb4361d, 0xd88334,
-		0x86a748, 0x34a784
+		0x02050d, 0xd4f8fc,
+		0x5c9bed, 0x0047ed,
+		0x0400ed, 0x6e2be3,
+		0xf02929, 0xf0311f,
+		0xc1002b, 0x74000a,
+		0x6a3918, 0xfa9813,
+		0xf59c53, 0x00c37d,
+		0x07865c, 0x004952
 	};
 	// 24-bit RGB colours, the MIKO colour palette
 
@@ -63,9 +65,12 @@ private:
 	enum class MIKO_State { MIKO_CONSOLE, MIKO_CART, MIKO_EDITOR, MIKO_IDE } miko_program = MIKO_State::MIKO_CONSOLE;
 	// Enum contains all system states
 
-	std::vector<std::string> miko_console_args;
+	std::vector<std::string> miko_console_args, miko_console_commands;
+	std::vector<std::vector<std::string>> miko_console_history;
 	// Console arguments for commands
 
+	nfdchar_t* miko_lastPath = nullptr;
+	// The last file path used to find a .miko file
 
 private:
 	void printText(std::string, Uint8, Uint8, Uint8);
