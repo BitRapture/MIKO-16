@@ -30,7 +30,7 @@ int main(int, char**)
 	if (MIKO.initialise(miko_render))
 	{
 		cleanup(miko_window, miko_render);
-		SDL_Log("[MIKO] Memory Allocation Error, failed to allocate memory");
+		SDL_Log("[MIKO] Failed to initialise MIKO System");
 		SDL_Quit();
 		return 403;
 	}
