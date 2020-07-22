@@ -2,7 +2,7 @@
 
 Discord_Handler::Discord_Handler()
 {
-	discord::Result res = discord::Core::Create(732384839138803794, DiscordCreateFlags_Default, &disCore);
+	discord::Result res = discord::Core::Create(732384839138803794, DiscordCreateFlags_NoRequireDiscord, &disCore);
 
 	if (res == discord::Result::Ok)
 		discord_running = true;
@@ -23,10 +23,9 @@ void Discord_Handler::updateRPC(std::string s_state, std::string s_details, std:
 
 void Discord_Handler::updateSDK()
 {
-	if (disCore->RunCallbacks() != discord::Result::Ok)
-		discord_running = false;
-	else
-		discord_running = true;
+	if (discord_running)
+		if (disCore->RunCallbacks() != discord::Result::Ok)
+			discord_running = false;
 }
 
 discord::User Discord_Handler::getUserInfo()
