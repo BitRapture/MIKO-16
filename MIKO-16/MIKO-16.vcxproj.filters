@@ -75,6 +75,9 @@
     <ClCompile Include="Discord_Handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MIKO_Compiler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SDL Cleanup.h">
@@ -141,6 +144,9 @@
       <Filter>discord-files</Filter>
     </ClInclude>
     <ClInclude Include="Discord_Handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MIKO_Compiler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,4 +1,3 @@
-#include "Discord_Handler.h"
 #include "MIKO_System.h"
 
 int main(int, char**)
@@ -34,15 +33,10 @@ int main(int, char**)
 		SDL_Quit();
 		return 403;
 	}
-
-	Discord_Handler discord_api;
-
 	const int FPS = 60;
 	const int frameDelay = 1000 / FPS;
 	Uint32 frameStart;
 	int frameTime;
-
-	discord_api.updateRPC("Death", "Idk u tell me", "miko_cart", "bruh bruh mansion housew pog pog poggers");
 
 	// Miko's game loop
 	while (MIKO.miko_sys_running)
@@ -55,8 +49,6 @@ int main(int, char**)
 		MIKO.updateSys();
 
 		SDL_RenderPresent(miko_render);
-
-		discord_api.updateSDK();
 
 		frameTime = SDL_GetTicks() - frameStart;
 		if (frameDelay > frameTime)

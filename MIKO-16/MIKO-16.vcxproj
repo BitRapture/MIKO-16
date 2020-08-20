@@ -162,6 +162,7 @@
     <ClCompile Include="discord-files\voice_manager.cpp" />
     <ClCompile Include="Discord_Handler.cpp" />
     <ClCompile Include="MIKO Main.cpp" />
+    <ClCompile Include="MIKO_Compiler.cpp" />
     <ClCompile Include="MIKO_Memory.cpp" />
     <ClCompile Include="MIKO_Processor.cpp" />
     <ClCompile Include="MIKO_System.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="discord-files\user_manager.h" />
     <ClInclude Include="discord-files\voice_manager.h" />
     <ClInclude Include="Discord_Handler.h" />
+    <ClInclude Include="MIKO_Compiler.h" />
     <ClInclude Include="MIKO_Memory.h" />
     <ClInclude Include="MIKO_Processor.h" />
     <ClInclude Include="MIKO_System.h" />
