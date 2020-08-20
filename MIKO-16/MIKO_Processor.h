@@ -6,10 +6,10 @@
 class MIKO_Processor
 {
 private:
-	Uint16 reg_a = 0, reg_x = 0, reg_y = 0, reg_sp = 0xff, reg_status = 0;
+	Uint16 reg_axy[3] = {0, 0, 0}, reg_sp = 0xff, reg_status = 0;
 	// Initialise the CPU registers
 
-	long long unsigned reg_pc = 0;
+	unsigned long reg_pc = 0;
 	// Initialise the CPU program counter (64 bit) a.k.a Instruction Pointer
 
 public:
