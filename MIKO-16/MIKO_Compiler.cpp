@@ -62,14 +62,46 @@ MIKO_Compiler::MIKO_Compiler()
 	islist.push_back("tya");
 }
 
-unsigned address_modes(std::string cint)
+Uint8 address_modes(std::string cint)
 {
 	if (cint.length() > 3)
 	{
 		switch (cint.at(3))
 		{
+		case '(':
+			if (cint.length() == 10 && cint.at(9) == ')')
+			{
+				if (cint.at(7) == ',')
+				{
+					// Indexed Indirect
+					return 7;
+				}
+				else if (cint.at(4) == '$')
+				{
+					// Indirect
+					return 6;
+				}
+				else
+					return 0;
+			}
+			else if (cint.length() == 10 && cint.at(7) == ')' && cint.at(8) == ',')
+			{
+				// Indirect Indexed
+				return 8;
+			}
+			else
+				return 0;
+			break;
 		case '#':
-
+			switch (cint.length())
+			{
+			case 7:
+				// Immediate
+				return 5;
+				break;
+			default:
+				return 0;
+			}
 			break;
 		case '$':
 			switch (cint.length())
@@ -109,20 +141,109 @@ unsigned address_modes(std::string cint)
 	return 0;
 }
 
-bool adc_inst(std::vector<unsigned>* raw, unsigned long* pc, std::string cint)
+/*
+	Modes ref sheet:
+	None	0;
+	Abs		1;	2B
+	Abs XY	2;	2B
+	ZerP	3;	1B
+	ZerP XY	4;	1B
+	Immed	5;	1B
+	Indir	6;	2B
+	IdxInd	7;	1B
+	IndIdx	8;	1B
+*/
+
+bool abs_address(std::vector<Uint8>* raw, unsigned long* pc, std::string cint)
 {
-	if (address_modes(cint) != 0)
+	if (cint.find_first_not_of("0123456789abcdef", 3) == std::string::npos)
 	{
-
+		std::string byte;
+		raw->push_back(0x01);
+		byte = cint[6];
+		byte += cint[7];
+		raw->push_back((Uint8)strtoul(byte.c_str(), NULL, 16));
+		byte = cint[4];
+		byte += cint[5];
+		raw->push_back((Uint8)strtoul(byte.c_str(), NULL, 16));
+		*pc += 3;
+		return true;
 	}
+	else
+		return false;
+}
 
-	return false;
+bool absxy_address(std::vector<Uint8>* raw, unsigned long* pc, std::string cint)
+{
+	std::string ad = cint;
+	ad.pop_back();
+	ad.pop_back();
+	if (cint.at(9) == 'x' || cint.at(9) == 'y')
+	{
+		if (ad.find_first_not_of("0123456789abcdef", 3) == std::string::npos)
+		{
+			std::string byte;
+			raw->push_back(0x02);
+			byte = cint[6];
+			byte += cint[7];
+			raw->push_back((Uint8)strtoul(byte.c_str(), NULL, 16));
+			byte = cint[4];
+			byte += cint[5];
+			raw->push_back((Uint8)strtoul(byte.c_str(), NULL, 16));
+			*pc += 3;
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+		return false;
+}
+
+bool zerp_address(std::vector<Uint8>* raw, unsigned long* pc, std::string cint)
+{
+	if (cint.find_first_not_of("0123456789abcdef", 3) == std::string::npos)
+	{
+		std::string byte;
+		raw->push_back(0x03);
+		byte = cint[4];
+		byte += cint[5];
+		raw->push_back((Uint8)strtoul(byte.c_str(), NULL, 16));
+		*pc += 2;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool adc_inst(std::vector<Uint8>* raw, unsigned long* pc, std::string cint)
+{
+	raw->push_back(0x01);
+	switch (address_modes(cint))
+	{
+	case 1:
+		return abs_address(raw, pc, cint);
+		break;
+	case 2:
+		return absxy_address(raw, pc, cint);
+		break;
+	case 3:
+		return zerp_address(raw, pc, cint);
+		break;
+	case 4:
+	case 5:
+	case 7:
+	case 8:
+		break;
+	default:
+		return false;
+	}
 }
 
 std::string MIKO_Compiler::compile(std::string path)
 {
 	std::vector<Branch> branches;
-	std::vector<unsigned> raw;
+	std::vector<Uint8> raw;
 	unsigned long pc = 0;
 	std::string cint;
 	char op = 0;
@@ -171,13 +292,22 @@ std::string MIKO_Compiler::compile(std::string path)
 			// Instruction found
 			if (it != islist.end())
 			{
+				bool funcLine;
 				switch (ist)
 				{
 				case 0:
-					adc_inst(&raw, &pc, cint);
+					funcLine = adc_inst(&raw, &pc, cint);
 				default:
+					funcLine = false;
 					break;
 				}
+
+				if (!funcLine)
+				{
+					infile.close();
+					return "err";
+				}
+
 				++pc;
 			}
 			// Add branch
